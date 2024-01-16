@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Jadwal Shalat</title>
+	<link rel="stylesheet" href="css/normalize.min.css" />
+	<link rel="stylesheet" href="js/owlcarousel/assets/owl.carousel.min.css" />
+	<link rel="stylesheet" href="js/owlcarousel/assets/owl.theme.default.min.css" />
+	<style>
+		*{
+			padding:0;
+			margin:0;
+		}
+		.row{
+			box-sizing:border-box;
+		}
+		.col{
+			float:left;
+			box-sizing:border-box;
+		}
+		.col4{
+			width:27%;
+		}
+		.first .mybox{
+			background-color: #021F00;
+			color: #ECF42F;
+			text-align:center;
+			border-radius:4px;
+		}
+		.col2{
+			width:46%;
+		}
+		.col7{
+			float:left;
+			width: 12.28%;
+			margin-left: 1%;
+			margin-right: 1%;
+		}
+		.p-0{padding:0;}
+		.mycontainer{
+			width:100%;
+			height: 100vh;
+		}
+		.first{
+			background-color: #013505;
+			padding:10px 0;
+			height:100px;
+		}
+		.first .middle1{
+			color: #fff;
+			font-size:30px;
+			font-weight:bold;
+		}
+		
+		.first .middle2{
+			color: #F5EC6D;
+			font-size:16px;
+		}
+		
+		.first .middle3{
+			color: #fff;
+			font-size:14px;
+		}
+		.second{
+			box-sizing: border-box;
+			padding:10px 20px 0 20px;
+			margin-bottom:20px;
+			height:56px;
+		}
+		
+		.third{
+			padding:0 20px;
+		}
+		
+		.four{
+			height:20px;
+		}
+		.four .footer1{
+			color:#fff;
+			float:left;
+		}
+		.four .footer2{
+			color:#fff;
+			float:right;
+		}
+		.myprayer{
+		
+			color:#fff;
+			float:left;
+		}
+		.masehi{
+			font-size:30px;
+			margin:0 auto 4px auto;
+			padding: 6px 8px;
+			text-transform: uppercase;
+		}
+		.hijriah{
+			padding: 6px 2px;
+		}
+		.countdown-event{
+			font-size:40px;
+		}
+		.prayer-title{
+			padding:3px;
+			text-align:center;
+			background-color: #81600F;
+			margin-bottom:5px;
+			border-radius: 4px;
+		}
+		.super-block{
+			/*background-color:#178B9A;*/
+			background-image: linear-gradient(#203161, #178B9A);
+		}
+		.prayer-time{
+			font-size: 20px;
+			padding:3px;
+			text-align:center;
+			background-color: #1E5F95;
+			border-radius: 4px;
+		}
+		.clear{
+			clear:both;
+		}
+		.text-center{
+			text-align:center;
+		}
+		.wallpaper-container{
+			
+		}
+		.wallpaper .item{
+			box-sizing: border-box;
+			width:100%;
+			/*background-image: url("img/img1.jpg");*/
+			background-size:100% 100%;
+			background-position:center;
+			background-repeat:no-repeat;
+			background-color: #124653;
+			height: calc(100vh - 196px);
+			border: 6px solid #124653;
+			border-radius: 4px;
+			-webkit-transition: all .2s ease-in-out;
+			-o-transition: all .2s ease-in-out;
+			transition: all .2s ease-in-out;
+			
+		}
+		
+		.second-block{
+			margin: 0 auto;
+		}
+		.running-container{
+			position: absolute;
+			bottom: 20px;
+			left:2%;
+			width: 96%;
+			z-index:99999999;
+		}
+		.running-text .js-marquee{
+		
+		}
+		.running-text{
+			padding: 4px;
+			overflow: hidden;
+			background: #2c0f0082;
+			color:#F5EC6D;
+			font-size: 30px;
+			
+		}
+		.highlight{
+			color: yellow !important;
+			font-weight:bold;
+			
+		}
+		.countdown-event{
+			margin-bottom: 5px;
+		}
+		.desc-container{
+			padding:5px;
+		}
+		.layer{
+			width:100%;
+			height:100vh;
+			background-color: #000;
+			position:fixed;
+			left:0;
+			top:0;
+			display:none;
+			color:#fff;
+			font-size:20px;
+		}
+	</style>
+
+</head>
+<body>
+	<div class="mycontainer p-0">
+		<div class="row first">
+			<div class="col col4">
+				<div class="masehi mybox"></div>
+				<div class="hijriah mybox"></div>
+			</div>
+			<div class="col col2 text-center">
+				<div class="middle1"></div>
+				<div class="middle2"></div>
+				<div class="middle3">
+					TZ: <span class="tz-offset"></span> | 
+					LAT: <span class="latitude"></span> | 
+					LNG: <span class="longitude"></span> | 
+					ALT: <span class="altitude"></span>
+				</div>
+			</div>
+			<div class="col col4">
+				<div class="countdown-event mybox"></div>
+				<div class="mybox desc-container"><span class="desc"></span></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="row super-block">
+			<div class="row second">
+				<div class="second-block">
+					<div class="col7 myprayer">
+						<div class="prayer-title">IMSAK</div>
+						<div class="prayer-time imsak"></div>
+					</div>
+					<div class="col7 myprayer">
+						<div class="prayer-title">SUBUH</div>
+						<div class="prayer-time subuh"></div>
+					</div>
+					<div class="col7 myprayer">
+						<div class="prayer-title">SYURUQ</div>
+						<div class="prayer-time syuruq"></div>
+					</div>
+					<div class="col7 myprayer">
+						<div class="prayer-title">DZHUHUR</div>
+						<div class="prayer-time dzhuhur"></div>
+					</div>
+					<div class="col7 myprayer">
+						<div class="prayer-title">ASHAR</div>
+						<div class="prayer-time ashar"></div>
+					</div>
+					<div class="col7 myprayer">
+						<div class="prayer-title">MAGHRIB</div>
+						<div class="prayer-time maghrib"></div>
+					</div>
+					<div class="col7 myprayer">
+						<div class="prayer-title">ISYA</div>
+						<div class="prayer-time isya"></div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+
+			<div class="row third">
+				<div class="wallpaper">
+					<div class="slide-container owl-carousel owl-theme">
+					</div>
+					<div class="running-container">
+						<div class="running-text"></div>
+					</div>
+				</div>
+				
+				<div class="row four">
+					<div class="row">
+						<div class="footer1">Versi : <span class="version"></span></div>
+						<div class="footer2 appname">Nama Aplikasi</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="layer"></div>
+	
+	<!--fix problem : google chrome update will not autoplay audio/video-->
+	<iframe src="audio/silence.mp3" allow="autoplay" id="audio" style="display:none"></iframe>
+	<audio id="player"  >
+		<source src="audio/beep.mp3" type="audio/mp3">
+	</audio>
+	
+	
+	<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/moment-with-locales.min.js"></script>
+<script src="js/moment-hijri.js"></script>
+
+<script src="js/PrayTimes.js"></script>
+<script src="js/jquery.marquee.min.js"></script>
+<script src="js/owlcarousel/owl.carousel.min.js"></script>
+
+<script>
+//app setting
+var app = {
+	version: '1.0.0',
+	name: 'Bilal App',
+	autoLocation: true //jika anda ingin menggunakan autolocation, setelah memilih opsi enable GPS pada browser, lalukan refresh pada browser. Fitur ini hanya berfungsi jika device terkoneksi dengan internet saja.
+};
+//general setting
+var setting = {
+	nama: 'MASJID AL - BINA',
+	alamat: 'Casablanca East Residences',
+	//settingan latitude longitude altitude timezone jika app.autoLocation=false atau jika browser tidak support HTML5 Geolocation
+	latitude: -6.223723,
+	longitude:106.897179,
+	altitude:100,
+	timezoneOffset:7,
+	methodCalc:'Egypt', //metode perhitungan adzan http://praytimes.org/wiki/Calculation_Methods .Script test metode test_metode.html . Valid value: MWL, ISNA, Egypt, Makkah, Karachi, Tehran, Jafari
+	dst: 'auto', //Daylight Saving Time: 1 if date is in daylight saving time, 0 otherwise. If omitted or set to 'auto', dst is extracted from the system.
+	tune: {imsak: 0, fajr: 0, sunrise:0, dhuhr:+1.5, asr:+1.5, sunset:0, maghrib:+1.5, isha:+1.5, midnight:0}, //- By default, PrayTimes rounds minutes to the nearest values. To round a specific time up, you can tune it by +0.5 minutes, and to round it down, you can tune it by -0.5 minutes. - Tuning is the last step after calculating step, and thus, it has no effect on the calculation parameters. For example, if Isha is set to be 90 minutes after sunset, tuning sunset by 5 minutes will not push Isha forward.
+	runningTextFile: "text/runningtext.txt",
+	runningTextSpeed: 15000, //15 detik
+	slideInterval: 15000,  //15 detik waktu interval slide
+	slideImageCount: 30, //jumlah maximum slide file (jgn lupa rename semua file di dalam folder slide jadi 1.jpg, 2.jpg dst)
+	adzanTime: 300000, // 5 menit lama tulisan adzan
+	iqomahTime: 6000, //1 menit lama waktu tulisan iqomah
+	shalatSunnahTime: 600000, //10 menit lama waktu tulisan sholat sunnah
+	aliasName: ['imsak', 'subuh', 'syuruq', 'dzhuhur', 'ashar', 'maghrib', 'isya']
+}
+if(app.autoLocation){
+	if ("geolocation" in navigator){ //check Geolocation available 
+		navigator.geolocation.getCurrentPosition(function(position){
+			setting.latitude = position.coords.latitude;
+			setting.longitude = position.coords.longitude;
+			setting.altitude	 = position.coords.altitude!==null?position.coords.altitude:setting.altitude;
+			setting.timezone = moment().utcOffset() / 60;
+		},
+		function error(msg) {
+			//do nothing
+		},
+		{maximumAge:10000, timeout:5000, enableHighAccuracy: true});
+	}else{
+		//console.log("Geolocation not available!");
+	}
+}
+function inArray(needle, haystack) {
+    var length = haystack.length;
+    for(var i = 0; i < length; i++) {
+        if(haystack[i] == needle) return true;
+    }
+    return false;
+}
+
+	var mycountdown;
+	var finalTime;
+$(function(){
+	
+	function beep(){
+		$('#player')[0].play();
+	}
+	
+	var offsetIcon = setting.timezoneOffset>0?'+':(setting.timezoneOffset==0)?'':'-';
+	var now = new Date(); // today
+	prayTimes.setMethod(setting.methodCalc);
+	prayTimes.tune(setting.tune);
+	var times = prayTimes.getTimes(now, [setting.latitude, setting.longitude], setting.timezoneOffset, setting.dst);
+	var masterTime = [times.imsak, times.fajr, times.sunrise, times.dhuhr, times.asr, times.maghrib, times.isha];
+	var masterName = setting.aliasName;
+	var tempShalat = masterTime;
+	
+	$('.imsak').text(times.imsak);
+	$('.subuh').text(times.fajr);
+	$('.syuruq').text(times.sunrise);
+	$('.dzhuhur').text(times.dhuhr);
+	$('.ashar').text(times.asr);
+	$('.maghrib').text(times.maghrib);
+	$('.isya').text(times.isha);
+	//console.log(times);
+	
+	$('.tz-offset').text(offsetIcon+setting.timezoneOffset);
+	$('.latitude').text(setting.latitude);
+	$('.longitude').text(setting.longitude);
+	$('.altitude').text(setting.altitude);
+	$('.middle1').text(setting.nama);
+	$('.middle2').text(setting.alamat);
+	$('.version').text(app.version);
+	$('.appname').text(app.name);
+	
+	$.ajax({
+		url: setting.runningTextFile,
+		success: function(d){
+			$('.running-text').text(d);
+			$('.running-text').marquee({duration: setting.runningTextSpeed});
+		}
+	});
+	
+	
+	
+	moment.locale('id'); 
+	//$('.masehi').text(moment().format('ddd, DD/MM/YYYY'));
+	//$('.hijriah').text(moment().format('iD iMMMM iYYYY'));
+	
+	
+	function countdownShalat(time, name, desc, shalatName =''){
+		$('.myprayer').removeClass('highlight');
+		$('.'+ name).closest('.myprayer').addClass('highlight');
+		$('.desc').text(desc);
+		finalTime = time;
+		var x = setInterval(function() {
+			var distance = finalTime - moment().unix();
+			var hours = Math.floor((distance % (60 * 60 * 24)) / ( 60 * 60));
+			var minutes = Math.floor((distance % ( 60 * 60)) / 60);
+			var seconds = Math.floor(distance % ( 60) );
+			
+			
+			if (distance < 0) {
+				clearInterval(x);
+				if(name=='adzan'){
+					countdownShalat(moment().add(setting.shalatSunnahTime).unix(), 'shalat_sunnah', 'Menjelang Iqomah '+shalatName, shalatName);
+				}else if(name=='shalat_sunnah'){
+					beep();
+					countdownShalat(moment().add(setting.iqomahTime).unix(), 'iqomah', 'Iqomah '+shalatName, shalatName);
+				}else if(inArray(name, ['subuh', 'dzhuhur', 'ashar', 'maghrib', 'isya'])){
+					beep();
+					countdownShalat(moment().add(setting.adzanTime).unix(), 'adzan', 'Adzan '+name, name);
+				}else{
+					nextSchedule();
+				}
+			}else{
+				$(".countdown-event").text(moment().second(seconds).minute(minutes).hour(hours).format('HH:mm:ss'));
+			}
+			$('.masehi').html(moment().format('HH:mm:ss'));
+			$('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
+		}, 1000);
+	}
+	
+	
+	
+	function nextSchedule(){
+		var found=false;
+		for(a=0;a<tempShalat.length;a++){
+			var now = moment().unix();
+			var next = moment(moment().format('YYYY-MM-DD ['+tempShalat[a]+':00]'), 'YYYY-MM-DD HH:mm:ss').unix();
+			if(now <next){//console.log(moment.unix(next).format('YYYY/MM/DD HH:mm:ss'));
+				countdownShalat(next, masterName[a], 'menjelang '+masterName[a]);
+				found=true;
+
+				//console.log([masterName[a], masterTime[a]]);
+				return false;
+			}else{
+				//console.log(tempShalat);
+				//console.log('lewat'+a +masterName[a]);
+				//tempShalat.shift();
+			}
+			
+		}
+		var splt = tempShalat[0].split(':');
+		next = moment().add(1, 'day').hour(splt[0]).minute(splt[1]).second(0).unix();
+		if(!found) countdownShalat(next, masterName[0], 'menjelang '+masterName[0]);
+	}
+	nextSchedule();
+	
+	function refreshApps(){
+		if(moment().format('h')==0){
+			location.reload();
+		}
+		setInterval(refreshApps, 3600000);
+	}
+	refreshApps();
+
+	for(a=1;a<=setting.slideImageCount;a++){
+		$('.slide-container').append('<div class="item" style="background-image: url(\'img/slide/'+a+'.jpg\')"></div>');
+	}
+	
+	$('.owl-carousel').owlCarousel({
+		loop:true,
+		items:1,
+		dots:false,
+		lazyLoad: true,
+		autoplay:true,
+		smartSpeed: 1000,
+		autoplayTimeout:setting.slideInterval,
+		slideTransition:'swing'
+	});
+	
+});
+</script>
+</body>
+</html>

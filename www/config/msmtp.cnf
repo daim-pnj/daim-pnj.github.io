@@ -1,0 +1,38 @@
+# This is sample msmtp.cnf file (used for msmtp which is used in php mail() function)
+#
+# Please fill in host, user, password, from and configure tls (if needed)
+# msmtp will work properly only if this file is set up properly
+#
+# For more info look at MSMTP documentation: http://msmtp.sourceforge.net/
+
+defaults
+
+# SMTP server IP or hostname
+host [ip_or_hostname]
+
+# SMTP server port
+port 25
+
+# Starting configuration of default account
+account default
+
+# Set to "on" if you want to enable TLS
+tls off
+
+# Set to "on" if you want to enable Start TLS
+tls_starttls off
+
+# Set to "off" if you want to disable server sertificate checking
+tls_certcheck on
+
+# Enable SMTP authentication, possible values are "off", "on", "PLAIN", "CRAM-MD5", "LOGIN"
+auth on
+
+# SMTP user name
+user [username]
+
+# SMTP user password
+password [password]
+
+# Default from email
+from [email]

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Jadwal Shalat</title>
+	
+</head>
+<body>
+	<div class="cont"></div>
+	
+	<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/moment-with-locales.min.js"></script>
+<script src="js/moment-hijri.js"></script>
+
+<script src="js/PrayTimes.js"></script>
+<script src="js/jquery.marquee.min.js"></script>
+<script src="js/owlcarousel/owl.carousel.min.js"></script>
+
+<script>
+//app setting
+var app = {
+	version: '1.0.0',
+	name: 'Prayer Times',
+	autoLocation: true //jika anda ingin menggunakan autolocation, setelah memilih opsi enable GPS pada browser, lalukan refresh pada browser. Fitur ini hanya berfungsi jika device terkoneksi dengan internet saja.
+};
+//general setting
+var setting = {
+	nama: 'Masjid Al-Rahman',
+	alamat: 'Jl Monumen Asli 22, Bekasi',
+	//settingan latitude longitude altitude timezone jika app.autoLocation=false atau jika browser tidak support HTML5 Geolocation
+	latitude: -6.175110,
+	longitude:106.865036,
+	altitude:100,
+	timezoneOffset:7,
+	runningTextFile: "text/runningtext.txt",
+	runningTextSpeed: 15000, //15 detik
+	slideInterval: 10000,  //10 detik waktu interval slide
+	slideImageCount: 3, //jumlah maximum slide file (jgn lupa rename semua file di dalam folder slide jadi 1.jpg, 2.jpg dst)
+	adzanTime: 5000, // 5 detik lama tulisan adzan
+	iqomahTime: 8000, //8 detik lama waktu tulisan iqomah
+	shalatSunnahTime: 10000, //10 detik lama waktu tulisan iqomah
+	aliasName: ['imsak', 'subuh', 'syuruq', 'dzhuhur', 'ashar', 'maghrib', 'isya']
+}
+if(app.autoLocation){
+	if ("geolocation" in navigator){ //check Geolocation available 
+		navigator.geolocation.getCurrentPosition(function(position){
+			setting.latitude = position.coords.latitude;
+			setting.longitude = position.coords.longitude;
+			setting.altitude	 = position.coords.altitude!==null?position.coords.altitude:setting.altitude;
+			setting.timezone = moment().utcOffset() / 60;
+		},
+		function error(msg) {
+			//do nothing
+		},
+		{maximumAge:10000, timeout:5000, enableHighAccuracy: true});
+	}else{
+		//console.log("Geolocation not available!");
+	}
+}
+function inArray(needle, haystack) {
+    var length = haystack.length;
+    for(var i = 0; i < length; i++) {
+        if(haystack[i] == needle) return true;
+    }
+    return false;
+}
+
+	var mycountdown;
+	var finalTime;
+$(function(){
+	
+	function beep(){
+		$('#player')[0].play();
+	}
+	
+	var offsetIcon = setting.timezoneOffset>0?'+':(setting.timezoneOffset==0)?'':'-';
+	var now = new Date(); // today
+	var method = ['MWL','ISNA', 'Egypt', 'Makkah','Karachi', 'Tehran','Jafari'];
+	var tune = {imsak: 0, fajr: 0, sunrise:0, dhuhr:0, asr:0, sunset:0, maghrib:0, isha:0, midnight:0};
+	for(a=0;a<method.length;a++){
+		prayTimes.setMethod(method[a]);
+		prayTimes.tune(tune);
+		var times = prayTimes.getTimes(now, [setting.latitude, setting.longitude], setting.timezoneOffset);
+		$('.cont').append('<div>method: '+method[a]+'<br>'+JSON.stringify(times)+'</div>');
+	}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# This is sample gmail configuration
+#
+# ! Make sure that you allow sign in on google account security, in most cases "Allow less secure apps" should be on
+# ! You can enable tls_certcheck but then you need to set tls_trust_file
+# ! If you cannot send mail, please check server log - there will probably be error message
+
+defaults
+
+host smtp.gmail.com
+port 587
+account default
+tls on
+tls_starttls on
+tls_certcheck off
+
+auth on
+
+user [your full gmail e-mail address, ...@gmail.com]
+password [gmail password]
+from [your full gmail e-mail address, ...@gmail.com]
