@@ -223,13 +223,34 @@
 					}else{
 						$(".countdown-event").text(moment().second(seconds).minute(minutes).hour(hours).format('HH:mm:ss'));
 					}
-					var currentTime = new Date();
-					var formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
-					console.log("Waktu hari ini: " + formattedTime);
-					// $('.masehi').html(moment().format('HH:mm:ss'));
-					$('.masehi').html(formattedTime);
-					$('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
-					$('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
+					// Mengambil waktu terkini di zona waktu WIB menggunakan WorldTimeAPI
+					fetch('https://worldtimeapi.org/api/timezone/Asia/Jakarta')
+					.then(response => response.json())
+					.then(data => {
+						// Mendapatkan waktu dari data yang diterima
+						var currentTime = new Date(data.utc_datetime);
+						
+						// Membuat format HH:mm:ss
+						var formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
+
+						// Menampilkan waktu yang telah diformat
+						console.log("Waktu di WIB: " + formattedTime);
+						console.log("Waktu hari ini: " + formattedTime);
+						// $('.masehi').html(moment().format('HH:mm:ss'));
+						$('.masehi').html(formattedTime);
+						$('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
+						$('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
+					})
+					.catch(error => {
+						console.error('Error fetching time:', error);
+					});
+					// var currentTime = new Date();
+					// var formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
+					// console.log("Waktu hari ini: " + formattedTime);
+					// // $('.masehi').html(moment().format('HH:mm:ss'));
+					// $('.masehi').html(formattedTime);
+					// $('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
+					// $('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
 				}, 1000);
 			}
 					
