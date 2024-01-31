@@ -172,17 +172,28 @@
     left:2%;
     width: 96%;
     z-index:99999999;
+    display: flex;
 }
+  
 /* .running-text .js-marquee{ */
 
 /* } */
 .running-text{ /*teks berjalan*/
     padding: 4px;
     overflow: hidden;
-    background: #2c0f0082;
+    /* background: #2c0f0082; */
+    background: #0000006f;
     color:#F5EC6D;
     font-size: 30px;
-    
+    /* width: 90%; */
+    flex: 1; /*Memberikan properti flex untuk meratakan ukuran kedua div
+    padding: 10px; /* Atur padding atau gaya lainnya sesuai kebutuhan */
+    /* border: 1px solid #ccc; Contoh: tambahkan border untuk visualisasi */
+}
+.fullscreen-button{
+    width: 20px;
+    background-color: #ccff00;
+    height: 20px;
 }
 .highlight{
     /* color: yellow !important; */
@@ -206,4 +217,34 @@ color:#ff4500 !important;
     display:none;
     color:#fff;
     font-size:20px;
+}
+#fullscreen-button {
+    /* position: absolute; */
+    top:  15px;
+    right:  15px;
+    background: rgba(0,0,0,0.15);
+    background: #0000006f;
+    background: #ccff006f;
+    border:  0;
+    width:  40px;
+    /* height:  40px; */
+    /* border-radius: 50%; */
+    box-sizing: border-box;
+    transition:  transform .3s;
+    cursor:  pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+#fullscreen-button:hover {
+    transform: scale(1.125);
+}
+#fullscreen-button svg:nth-child(2) { 
+    display: none;
+}
+[fullscreen] #fullscreen-button svg:nth-child(1) {
+    display: none;
+}
+[fullscreen] #fullscreen-button svg:nth-child(2) {
+    display: inline-block;
 }
