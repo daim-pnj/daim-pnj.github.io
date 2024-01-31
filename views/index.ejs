@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Jadwal Shalat</title>
+	<link rel="stylesheet" href="public/css/normalize.min.css" />
+	<link rel="stylesheet" href="public/js/owlcarousel/assets/owl.carousel.min.css" />
+	<link rel="stylesheet" href="public/js/owlcarousel/assets/owl.theme.default.min.css" />
+	<link rel="stylesheet" href="public/css/styles.css" />
+</head>
+<body>
+	<div class="mycontainer p-0">
+		<div class="row first">
+			<div class="col col4">
+				<div class="masehi mybox"></div>
+				<div class="hijriah mybox"></div>
+			</div>
+			<div class="col col2 text-center">
+				<div class="middle1"></div>
+				<div class="middle2"></div>
+				<div class="middle3">
+					TZ: <span class="tz-offset"></span> | 
+					LAT: <span class="latitude"></span> | 
+					LNG: <span class="longitude"></span> | 
+					ALT: <span class="altitude"></span>
+				</div>
+			</div>
+			<div class="col col4">
+				<div class="countdown-event mybox"></div>
+				<div class="mybox desc-container"><span class="desc"></span></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="row super-block">
+			<div class="row second">
+				<div class="second-block">
+					<div class="col7 myprayer">
+						<div class="prayer-title">IMSAK</div>
+						<div class="prayer-time IMSAK"></div>
+					</div>
+					<div class="col7 myprayer">
+						<div class="prayer-title">SUBUH</div>
+						<div class="prayer-time SUBUH"></div>
+					</div>
+					<div class="col7 myprayer">
+						<div class="prayer-title">SYURUQ</div>
+						<div class="prayer-time SYURUQ"></div>
+					</div>
+					<div class="col7 myprayer">
+						<div class="prayer-title">ZHUHUR</div>
+						<div class="prayer-time ZHUHUR"></div>
+					</div>
+					<div class="col7 myprayer">
+						<div class="prayer-title">ASHAR</div>
+						<div class="prayer-time ASHAR"></div>
+					</div>
+					<div class="col7 myprayer">
+						<div class="prayer-title">MAGHRIB</div>
+						<div class="prayer-time MAGHRIB"></div>
+					</div>
+					<div class="col7 myprayer">
+						<div class="prayer-title">ISYA</div>
+						<div class="prayer-time ISYA"></div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+
+			<div class="row third">
+				<div class="wallpaper">
+					<div class="slide-container owl-carousel owl-theme">
+					</div>
+					<div class="running-container">
+						<div class="running-text"></div>
+						<div id="fullscreen-button" onclick="toggle_fullscreen()">
+							<svg viewBox="0 0 24 24">
+								<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 
+								7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+							</svg>
+							<svg viewBox="0 0 24 24">
+								<path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 
+								11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
+							</svg>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row four">
+					<div class="row">
+						<div class="footer1">Versi : <span class="version"></span></div>
+						<div class="footer2 appname">Nama Aplikasi</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="layer"></div>
+	
+	<!--fix problem : google chrome update will not autoplay audio/video-->
+	<iframe src="public/audio/silence.mp3" allow="autoplay" id="audio" style="display:none"></iframe>
+	<audio id="player"  >
+		<source src="public/audio/beep.mp3" type="audio/mp3">
+	</audio>
+	
+	<script src="public/js/jquery-3.3.1.min.js"></script>
+	<script src="public/js/moment-with-locales.min.js"></script>
+	<script src="public/js/moment-hijri.js"></script>
+
+	<script src="public/js/PrayTimes.js"></script>
+	<script src="public/js/jquery.marquee.min.js"></script>
+	<script src="public/js/owlcarousel/owl.carousel.min.js"></script>
+
+	<script>
+        //app setting			
+			
+			moment.locale('id'); 
+			//$('.masehi').text(moment().format('ddd, DD/MM/YYYY'));
+			//$('.hijriah').text(moment().format('iD iMMMM iYYYY'));			
+			
+			function countdownShalat(time, name, desc, shalatName =''){
+				$('.myprayer').removeClass('highlight');
+				$('.'+ name).closest('.myprayer').addClass('highlight');
+				$('.desc').text(desc);
+				finalTime = time;
+				var x = setInterval(function() {
+					var distance = finalTime - moment().unix();
+					var hours = Math.floor((distance % (60 * 60 * 24)) / ( 60 * 60));
+					var minutes = Math.floor((distance % ( 60 * 60)) / 60);
+					var seconds = Math.floor(distance % ( 60) );
+										
+					if (distance < 0) {
+						clearInterval(x);
+						if(name=='adzan'){
+							countdownShalat(moment().add(setting.shalatSunnahTime).unix(), 'shalat_sunnah', 'MENJELANG IQOMAH '+shalatName, shalatName);
+								if(shalatName=='SUBUH'){ countdownShalat(moment().add(setting.shalatSunnahTimeSubuh).unix(),'shalat_sunnah','MENJELANG IQOMAH ' +shalatName,shalatName); }
+						}else if(name=='shalat_sunnah'){
+							beep();
+							countdownShalat(moment().add(setting.iqomahTime).unix(), 'iqomah', 'IQOMAH '+shalatName, shalatName);
+						}else if(inArray(name, ['SUBUH', 'ZHUHUR', 'ASHAR', 'MAGHRIB', 'ISYA'])){
+							beep();
+							countdownShalat(moment().add(setting.adzanTime).unix(), 'adzan', 'ADZAN '+name, name);
+						}else{
+							nextSchedule();
+						}
+					}else{
+						$(".countdown-event").text(moment().second(seconds).minute(minutes).hour(hours).format('HH:mm:ss'));
+					}
+					// Mengambil waktu terkini di zona waktu WIB menggunakan WorldTimeAPI
+					fetch('https://worldtimeapi.org/api/timezone/Asia/Jakarta')
+					.then(response => response.json())
+					.then(data => {
+						// Mendapatkan waktu dari data yang diterima
+						var currentTime = new Date(data.utc_datetime);
+						
+						// Membuat format HH:mm:ss
+						var formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
+
+						// Menampilkan waktu yang telah diformat
+						console.log("Waktu di WIB: " + formattedTime);
+						console.log("Waktu hari ini: " + formattedTime);
+						// $('.masehi').html(moment().format('HH:mm:ss'));
+						$('.masehi').html(formattedTime);
+						$('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
+						$('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
+					})
+					.catch(error => {
+						console.error('Error fetching time:', error);
+					});
+					// var currentTime = new Date();
+					// var formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
+					// console.log("Waktu hari ini: " + formattedTime);
+					// // $('.masehi').html(moment().format('HH:mm:ss'));
+					// $('.masehi').html(formattedTime);
+					// $('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
+					// $('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
+				}, 1000);
+			}
+					
+			function nextSchedule(){
+				var found=false;
+				for(a=0;a<tempShalat.length;a++){
+					var now = moment().unix();
+					var next = moment(moment().format('YYYY-MM-DD ['+tempShalat[a]+':00]'), 'YYYY-MM-DD HH:mm:ss').unix();
+					if(now <next){//console.log(moment.unix(next).format('YYYY/MM/DD HH:mm:ss'));
+						countdownShalat(next, masterName[a], 'MENJELANG '+masterName[a]);
+						found=true;
+						//console.log([masterName[a], masterTime[a]]);
+						return false;
+					}else{
+						//console.log(tempShalat);
+						//console.log('lewat'+a +masterName[a]);
+						//tempShalat.shift();
+					}
+					
+				}
+				var splt = tempShalat[0].split(':');
+				next = moment().add(1, 'day').hour(splt[0]).minute(splt[1]).second(0).unix();
+				if(!found) countdownShalat(next, masterName[0], 'MENJELANG '+masterName[0]);
+			}
+			nextSchedule();
+			
+		// 	function refreshApps(){
+		// 		if(moment().format('h')==0){
+		// 			location.reload();
+		// 		}
+		// 		setInterval(refreshApps, 18000);
+		// 	}
+		// 	refreshApps();
+
+			for(a=1;a<=setting.slideImageCount;a++){
+				$('.slide-container').append('<div class="item" style="background-image: url(\'public/img/slide/'+a+'.jpg\')"></div>');
+			}
+			
+			$('.owl-carousel').owlCarousel({
+				loop:true,
+				items:1,
+				dots:false,
+				lazyLoad: true,
+				autoplay:true,
+				smartSpeed: 1000,
+				autoplayTimeout:setting.slideInterval,
+				slideTransition:'swing'
+			});			
+		function toggle_fullscreen() {
+			if (!document.fullscreenElement) {
+				document.body.requestFullscreen();
+				document.body.setAttribute("fullscreen",""); 
+			} else {
+				document.exitFullscreen();
+				document.body.removeAttribute("fullscreen"); 
+			}
+		}
+	</script>
+</body>
+</html>
