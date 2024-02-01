@@ -3,10 +3,11 @@
 <head>
 	<meta charset="utf-8">
 	<title>Jadwal Shalat</title>
-	<link rel="stylesheet" href="public/css/normalize.min.css" />
-	<link rel="stylesheet" href="public/js/owlcarousel/assets/owl.carousel.min.css" />
-	<link rel="stylesheet" href="public/js/owlcarousel/assets/owl.theme.default.min.css" />
-	<link rel="stylesheet" href="public/css/styles.css" />
+	<link rel="stylesheet" href="css/normalize.min.css" />
+	<!-- <link rel="stylesheet" href="js/owlcarousel/assets/owl.carousel.min.css" /> -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/assets/owl.carousel.min.css">
+	<!-- <link rel="stylesheet" href="js/owlcarousel/assets/owl.theme.default.min.css" /> -->
+	<link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
 	<div class="mycontainer p-0">
@@ -87,8 +88,8 @@
 				
 				<div class="row four">
 					<div class="row">
-						<div class="footer1">Versi : <span class="version"></span></div>
-						<div class="footer2 appname">Nama Aplikasi</div>
+						<div class="footer1">Versi : <%= app.version %></div>
+						<div class="footer2 appname"> <%= app.name %> </div>
 					</div>
 				</div>
 			</div>
@@ -97,130 +98,84 @@
 	<div class="layer"></div>
 	
 	<!--fix problem : google chrome update will not autoplay audio/video-->
-	<iframe src="public/audio/silence.mp3" allow="autoplay" id="audio" style="display:none"></iframe>
+	<iframe src="audio/silence.mp3" allow="autoplay" id="audio" style="display:none"></iframe>
 	<audio id="player"  >
-		<source src="public/audio/beep.mp3" type="audio/mp3">
+		<source src="audio/beep.mp3" type="audio/mp3">
 	</audio>
 	
-	<script src="public/js/jquery-3.3.1.min.js"></script>
-	<script src="public/js/moment-with-locales.min.js"></script>
-	<script src="public/js/moment-hijri.js"></script>
+	<!-- <script src="js/jquery-3.3.1.min.js"></script> -->
+	<script src="js/moment-with-locales.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+	<script src="js/moment-hijri.js"></script>
 
-	<script src="public/js/PrayTimes.js"></script>
-	<script src="public/js/jquery.marquee.min.js"></script>
-	<script src="public/js/owlcarousel/owl.carousel.min.js"></script>
+	<script src="js/PrayTimes.js"></script>
+	<!-- <script src="js/jquery.marquee.min.js"></script> -->
+	<script src="//cdn.jsdelivr.net/npm/jquery.marquee@1.6.0/jquery.marquee.min.js" type="text/javascript"></script>
+	<!-- <script src="js/owlcarousel/owl.carousel.min.js"></script> -->
+	<script src="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js"></script>
+	<script src="js/timer.js"></script>
+
+	<% if (app.autoLocation) { %>
+	<script>
+		if ("geolocation" in navigator){ //check Geolocation available 
+				navigator.geolocation.getCurrentPosition(function(position){
+					setting.latitude = position.coords.latitude;
+					setting.longitude = position.coords.longitude;
+					setting.altitude	 = position.coords.altitude!==null?position.coords.altitude:setting.altitude;
+					setting.timezone = moment().utcOffset() / 60;
+				},
+				function error(msg) {
+					//do nothing
+				},
+				{maximumAge:10000, timeout:5000, enableHighAccuracy: true});
+			}else{
+				//console.log("Geolocation not available!");
+			}
+	</script>
+	<% } %>
 
 	<script>
-        //app setting			
-			
-			moment.locale('id'); 
-			//$('.masehi').text(moment().format('ddd, DD/MM/YYYY'));
-			//$('.hijriah').text(moment().format('iD iMMMM iYYYY'));			
-			
-			function countdownShalat(time, name, desc, shalatName =''){
-				$('.myprayer').removeClass('highlight');
-				$('.'+ name).closest('.myprayer').addClass('highlight');
-				$('.desc').text(desc);
-				finalTime = time;
-				var x = setInterval(function() {
-					var distance = finalTime - moment().unix();
-					var hours = Math.floor((distance % (60 * 60 * 24)) / ( 60 * 60));
-					var minutes = Math.floor((distance % ( 60 * 60)) / 60);
-					var seconds = Math.floor(distance % ( 60) );
-										
-					if (distance < 0) {
-						clearInterval(x);
-						if(name=='adzan'){
-							countdownShalat(moment().add(setting.shalatSunnahTime).unix(), 'shalat_sunnah', 'MENJELANG IQOMAH '+shalatName, shalatName);
-								if(shalatName=='SUBUH'){ countdownShalat(moment().add(setting.shalatSunnahTimeSubuh).unix(),'shalat_sunnah','MENJELANG IQOMAH ' +shalatName,shalatName); }
-						}else if(name=='shalat_sunnah'){
-							beep();
-							countdownShalat(moment().add(setting.iqomahTime).unix(), 'iqomah', 'IQOMAH '+shalatName, shalatName);
-						}else if(inArray(name, ['SUBUH', 'ZHUHUR', 'ASHAR', 'MAGHRIB', 'ISYA'])){
-							beep();
-							countdownShalat(moment().add(setting.adzanTime).unix(), 'adzan', 'ADZAN '+name, name);
-						}else{
-							nextSchedule();
-						}
-					}else{
-						$(".countdown-event").text(moment().second(seconds).minute(minutes).hour(hours).format('HH:mm:ss'));
-					}
-					// Mengambil waktu terkini di zona waktu WIB menggunakan WorldTimeAPI
-					fetch('https://worldtimeapi.org/api/timezone/Asia/Jakarta')
-					.then(response => response.json())
-					.then(data => {
-						// Mendapatkan waktu dari data yang diterima
-						var currentTime = new Date(data.utc_datetime);
-						
-						// Membuat format HH:mm:ss
-						var formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
+		moment.locale('id'); 
+		
+		$('.IMSAK').text(times.imsak);
+		$('.SUBUH').text(times.fajr);
+		$('.SYURUQ').text(times.sunrise);
+		$('.ZHUHUR').text(times.dhuhr);
+		$('.ASHAR').text(times.asr);
+		$('.MAGHRIB').text(times.maghrib);
+		$('.ISYA').text(times.isha);
+		//console.log(times);			
+		$('.tz-offset').text(offsetIcon+setting.timezoneOffset);
+		$('.latitude').text(setting.latitude);
+		$('.longitude').text(setting.longitude);
+		$('.altitude').text(setting.altitude);
+		$('.middle1').text(setting.nama);
+		$('.middle2').text(setting.alamat);
 
-						// Menampilkan waktu yang telah diformat
-						console.log("Waktu di WIB: " + formattedTime);
-						console.log("Waktu hari ini: " + formattedTime);
-						// $('.masehi').html(moment().format('HH:mm:ss'));
-						$('.masehi').html(formattedTime);
-						$('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
-						$('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
-					})
-					.catch(error => {
-						console.error('Error fetching time:', error);
-					});
-					// var currentTime = new Date();
-					// var formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
-					// console.log("Waktu hari ini: " + formattedTime);
-					// // $('.masehi').html(moment().format('HH:mm:ss'));
-					// $('.masehi').html(formattedTime);
-					// $('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
-					// $('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
-				}, 1000);
-			}
-					
-			function nextSchedule(){
-				var found=false;
-				for(a=0;a<tempShalat.length;a++){
-					var now = moment().unix();
-					var next = moment(moment().format('YYYY-MM-DD ['+tempShalat[a]+':00]'), 'YYYY-MM-DD HH:mm:ss').unix();
-					if(now <next){//console.log(moment.unix(next).format('YYYY/MM/DD HH:mm:ss'));
-						countdownShalat(next, masterName[a], 'MENJELANG '+masterName[a]);
-						found=true;
-						//console.log([masterName[a], masterTime[a]]);
-						return false;
-					}else{
-						//console.log(tempShalat);
-						//console.log('lewat'+a +masterName[a]);
-						//tempShalat.shift();
-					}
-					
-				}
-				var splt = tempShalat[0].split(':');
-				next = moment().add(1, 'day').hour(splt[0]).minute(splt[1]).second(0).unix();
-				if(!found) countdownShalat(next, masterName[0], 'MENJELANG '+masterName[0]);
-			}
-			nextSchedule();
-			
-		// 	function refreshApps(){
-		// 		if(moment().format('h')==0){
-		// 			location.reload();
-		// 		}
-		// 		setInterval(refreshApps, 18000);
-		// 	}
-		// 	refreshApps();
+		fetch(setting.runningTextFile)
+			.then((response) => response.text())
+			.then((text) => {
+				$('.running-text').text(text);
+        		$('.running-text').marquee({duration: setting.runningTextSpeed});
+			})
 
-			for(a=1;a<=setting.slideImageCount;a++){
-				$('.slide-container').append('<div class="item" style="background-image: url(\'public/img/slide/'+a+'.jpg\')"></div>');
-			}
-			
-			$('.owl-carousel').owlCarousel({
-				loop:true,
-				items:1,
-				dots:false,
-				lazyLoad: true,
-				autoplay:true,
-				smartSpeed: 1000,
-				autoplayTimeout:setting.slideInterval,
-				slideTransition:'swing'
-			});			
+		nextSchedule()
+
+		for(a=1;a<=setting.slideImageCount;a++){
+			$('.slide-container').append('<div class="item" style="background-image: url(\'img/slide/'+a+'.jpg\')"></div>');
+		}
+
+		$('.owl-carousel').owlCarousel({
+			loop:true,
+			items:1,
+			dots:false,
+			lazyLoad: true,
+			autoplay:true,
+			smartSpeed: 1000,
+			autoplayTimeout:setting.slideInterval,
+			slideTransition:'swing'
+		});		
+
 		function toggle_fullscreen() {
 			if (!document.fullscreenElement) {
 				document.body.requestFullscreen();
@@ -231,5 +186,6 @@
 			}
 		}
 	</script>
+
 </body>
 </html>

@@ -577,5 +577,4 @@ var DMath = {
 
 var prayTimes = new PrayTimes();
 
-module.exports = prayTimes;
 
