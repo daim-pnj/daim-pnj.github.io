@@ -19,8 +19,10 @@
     /* background-color: #003366; */
     /* color: #ECF42F; */
     text-align:center;
-    border-radius:4px;
+    border-radius:10px;
     font-weight:bold;
+    padding: 1%;
+    margin: 1%;
 }
 .col2{ 
     width:46%;
@@ -39,8 +41,8 @@
 .first{ /*header*/
     /* background-color: #013505; */
     background-color: #006699;
-    padding:5px 0;
-    height:100px;
+    padding: 0% 0.5%;
+    height:17vh;
 }
 .first .middle1{ /*nama masjid*/
     color: #fff;
@@ -62,8 +64,8 @@
 .second{ /*bawah header box shol n jamshol*/
     box-sizing: border-box;
     padding:5px 10px 0 10px;
-    margin-bottom:20px;
-    height:64px;
+    margin-bottom:1vh;
+    height:11vh;
     
 }
 
@@ -91,24 +93,31 @@
     float:left;
     font-weight:bold;
 }
-.masehi{ /*jam skrg */
-    font-size:50px;
+.time{ /*jam skrg */
+    font-size:8vh;
     font-weight:bold;
-    margin:0 auto 5px auto;
+    /* margin:0 auto 5px auto; */
     padding: 0px 0px;
     text-transform: uppercase;
     color:#66ffff;
 }
-.hijriah{ /*hari skrg*/
+.date{ /*hari skrg*/
     padding: 8px 0px;
     font-weight:bold;
     color:#dcdcdc;
-    font-size:13px;
+    font-size:3vh;
+}
+
+.day{
+    padding: 8px 0px;
+    font-weight:bold;
+    color:#dcdcdc;
+    font-size:6vh; 
 }
 .countdown-event{ /*waktu mundur*/
     
     padding: 0px 0px;
-    font-size:60px;
+    font-size:4vh;
     font-weight:bold;
     color:#ccff00;
 }
@@ -129,7 +138,7 @@
     background-image: linear-gradient(#2193b0, #6dd5ed, #f8f1e5);
 }
 .prayer-time{ /*waktu sholat*/
-    font-size: 44px;
+    font-size: 6vh;
     padding:0px;
     text-align:center;
     /* background-color: #1E5F95; */
@@ -154,7 +163,7 @@
     background-position:center;
     background-repeat:no-repeat;
     background-color: #124653;
-    height: calc(100vh - 196px);
+    height:69vh;
     border: 6px solid #124653;
     border-radius: 4px;
     -webkit-transition: all .2s ease-in-out;

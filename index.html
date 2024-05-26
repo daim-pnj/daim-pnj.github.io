@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="utf-8">
 	<title>Jadwal Shalat</title>
-	<link rel="stylesheet" href="www/public/Bilal/css/normalize.min.css" />
-	<link rel="stylesheet" href="www/public/Bilal/js/owlcarousel/assets/owl.carousel.min.css" />
-	<link rel="stylesheet" href="www/public/Bilal/js/owlcarousel/assets/owl.theme.default.min.css" />
-	<link rel="stylesheet" href="www/public/Bilal/css/styles.css" />
+	<link rel="stylesheet" href="www/public/css/normalize.min.css" />
+	<link rel="stylesheet" href="www/public/js/owlcarousel/assets/owl.carousel.min.css" />
+	<link rel="stylesheet" href="www/public/js/owlcarousel/assets/owl.theme.default.min.css" />
+	<link rel="stylesheet" href="www/public/css/styles.css" />
 </head>
+
 <body>
 	<div class="mycontainer p-0">
 		<div class="row first">
 			<div class="col col4">
-				<div class="masehi mybox"></div>
-				<div class="hijriah mybox"></div>
+				<div class="time mybox"></div>
+				<div class="countdown-event mybox"></div>
 			</div>
 			<div class="col col2 text-center">
 				<div class="middle1"></div>
 				<div class="middle2"></div>
 				<div class="middle3">
-					TZ: <span class="tz-offset"></span> | 
-					LAT: <span class="latitude"></span> | 
-					LNG: <span class="longitude"></span> | 
+					TZ: <span class="tz-offset"></span> |
+					LAT: <span class="latitude"></span> |
+					LNG: <span class="longitude"></span> |
 					ALT: <span class="altitude"></span>
 				</div>
 			</div>
 			<div class="col col4">
-				<div class="countdown-event mybox"></div>
-				<div class="mybox desc-container"><span class="desc"></span></div>
+				<div class="day mybox"></div>
+				<div class="date mybox"></div>
 			</div>
 			<div class="clear"></div>
 		</div>
@@ -75,16 +77,16 @@
 						<div id="fullscreen-button" onclick="toggle_fullscreen()">
 							<svg viewBox="0 0 24 24">
 								<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 
-								7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+								7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
 							</svg>
 							<svg viewBox="0 0 24 24">
 								<path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 
-								11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
+								11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
 							</svg>
 						</div>
 					</div>
 				</div>
-				
+
 				<div class="row four">
 					<div class="row">
 						<div class="footer1">Versi : <span class="version"></span></div>
@@ -95,230 +97,204 @@
 		</div>
 	</div>
 	<div class="layer"></div>
-	
+
 	<!--fix problem : google chrome update will not autoplay audio/video-->
-	<iframe src="www/public/Bilal/audio/silence.mp3" allow="autoplay" id="audio" style="display:none"></iframe>
-	<audio id="player"  >
-		<source src="www/public/Bilal/audio/beep.mp3" type="audio/mp3">
+	<iframe src="www/public/audio/silence.mp3" allow="autoplay" id="audio" style="display:none"></iframe>
+	<audio id="player">
+		<source src="www/public/audio/beep.mp3" type="audio/mp3">
 	</audio>
-	
-	<script src="www/public/Bilal/js/jquery-3.3.1.min.js"></script>
-	<script src="www/public/Bilal/js/moment-with-locales.min.js"></script>
-	<script src="www/public/Bilal/js/moment-hijri.js"></script>
 
-	<script src="www/public/Bilal/js/PrayTimes.js"></script>
-	<script src="www/public/Bilal/js/jquery.marquee.min.js"></script>
-	<script src="www/public/Bilal/js/owlcarousel/owl.carousel.min.js"></script>
+	<script src="www/public/js/jquery-3.3.1.min.js"></script>
+	<script src="www/public/js/moment-with-locales.min.js"></script>
+	<script src="www/public/js/moment-hijri.js"></script>
 
-	<script>
+	<script src="www/public/js/PrayTimes.js"></script>
+	<script src="www/public/js/jquery.marquee.min.js"></script>
+
+
+	<script type="module">
+		import { ref, listAll, getDownloadURL, storage } from './www/config/firebase.js'
+		import { app, setting } from './www/config/appconfig.js'
 		//app setting
-		var app = {
-			version: '1.0.0',
-			name: 'Bilal App',
-			autoLocation: true //jika anda ingin menggunakan autolocation, setelah memilih opsi enable GPS pada browser, lalukan refresh pada browser. Fitur ini hanya berfungsi jika device terkoneksi dengan internet saja.
-		};
-		//general setting
-		var setting = {
-			nama: 'MASJID DARUL ILMI',
-			alamat: 'Politeknik Negeri Jakarta',
-			//settingan latitude longitude altitude timezone jika app.autoLocation=false atau jika browser tidak support HTML5 Geolocation
-			latitude: -6.223723,
-			longitude: 106.897179,
-			altitude: 100,
-			timezoneOffset:7,
-			methodCalc:'Kemenag', //metode perhitungan adzan http://praytimes.org/wiki/Calculation_Methods .Script test metode test_metode.html . Valid value: MWL, ISNA, Egypt, Makkah, Karachi, Tehran, Jafari
-			dst: 'auto', //Daylight Saving Time: 1 if date is in daylight saving time, 0 otherwise. If omitted or set to 'auto', dst is extracted from the system.
-			tune: {imsak: +3, fajr: +3, sunrise: +3, dhuhr: +3, asr: +3, sunset: +3, maghrib:+3, isha:+3, midnight:+3}, //- By default, PrayTimes rounds minutes to the nearest values. To round a specific time up, you can tune it by +0.5 minutes, and to round it down, you can tune it by -0.5 minutes. - Tuning is the last step after calculating step, and thus, it has no effect on the calculation parameters. For example, if Isha is set to be 90 minutes after sunset, tuning sunset by 5 minutes will not push Isha forward.
-			runningTextFile: "www/public/Bilal/text/runningtext.txt" , ////"https://herifauzan.github.io/public-site/",
-			runningTextSpeed: 15000, //15 detik
-			slideInterval: 17000,  //17 detik waktu interval slide
-			slideImageCount: 8, //jumlah maximum slide file (jgn lupa rename semua file di dalam folder slide jadi 1.jpg, 2.jpg dst)
-			adzanTime: 300000, // 5 menit lama tulisan adzan
-			iqomahTime: 6000, //1 menit lama waktu tulisan iqomah
-			shalatSunnahTime: 600000, //10 menit lama waktu tulisan sholat sunnah
-			shalatSunnahTimeSubuh: 900000,
-			aliasName: ['IMSAK', 'SUBUH', 'SYURUQ', 'ZHUHUR', 'ASHAR', 'MAGHRIB', 'ISYA']
-		}
-		if(app.autoLocation){
-			if ("geolocation" in navigator){ //check Geolocation available 
-				navigator.geolocation.getCurrentPosition(function(position){
+		if (app.autoLocation) {
+			if ("geolocation" in navigator) { //check Geolocation available 
+				navigator.geolocation.getCurrentPosition(function (position) {
 					setting.latitude = position.coords.latitude;
 					setting.longitude = position.coords.longitude;
-					setting.altitude	 = position.coords.altitude!==null?position.coords.altitude:setting.altitude;
+					setting.altitude = position.coords.altitude !== null ? position.coords.altitude : setting.altitude;
 					setting.timezone = moment().utcOffset() / 60;
 				},
-				function error(msg) {
-					//do nothing
-				},
-				{maximumAge:10000, timeout:5000, enableHighAccuracy: true});
-			}else{
+					function error(msg) {
+						//do nothing
+					},
+					{ maximumAge: 10000, timeout: 5000, enableHighAccuracy: true });
+			} else {
 				//console.log("Geolocation not available!");
 			}
 		}
+		
+		let finalTime;
+
+		let offsetIcon = setting.timezoneOffset > 0 ? '+' : (setting.timezoneOffset == 0) ? '' : '-';
+		let now = new Date(); // today
+		prayTimes.setMethod(setting.methodCalc);
+		prayTimes.tune(setting.tune);
+		let times = prayTimes.getTimes(now, [setting.latitude, setting.longitude], setting.timezoneOffset, setting.dst);
+		let masterTime = [times.imsak, times.fajr, times.sunrise, times.dhuhr, times.asr, times.maghrib, times.isha];
+		let masterName = setting.aliasName;
+		let tempShalat = masterTime;
+		$('.IMSAK').text(times.imsak);
+		$('.SUBUH').text(times.fajr);
+		$('.SYURUQ').text(times.sunrise);
+		$('.ZHUHUR').text(times.dhuhr);
+		$('.ASHAR').text(times.asr);
+		$('.MAGHRIB').text(times.maghrib);
+		$('.ISYA').text(times.isha);
+		//console.log(times);			
+		$('.tz-offset').text(offsetIcon + setting.timezoneOffset);
+		$('.latitude').text(setting.latitude);
+		$('.longitude').text(setting.longitude);
+		$('.altitude').text(setting.altitude);
+		$('.middle1').text(setting.nama);
+		$('.middle2').text(setting.alamat);
+		$('.version').text(app.version);
+		$('.appname').text(app.name);
+
+		$.ajax({
+			url: setting.runningTextFile,
+			success: function (d) {
+				$('.running-text').text(d);
+				$('.running-text').marquee({ duration: setting.runningTextSpeed });
+			}
+		});
+
+		moment.locale('id');
+
+		nextSchedule();
+
+		// Get Images from Firebase
+		// await Promise.all() is used to return the result of promise array
+		let images = await Promise.all(await getImages())
+
+		images.forEach(image => {
+			$('.slide-container').append(`<div class="item" style="background-image: url('${image}')""></div>`);
+		})
+
+		// for (let a = 0; a < images.length; a++) {
+		// 	$('.slide-container').append(`<div class="item" style="background-image: url('${images[a]}')""></div>`);
+		// }
+
+		$('.owl-carousel').owlCarousel({
+			loop: true,
+			items: 1,
+			dots: false,
+			lazyLoad: true,
+			autoplay: true,
+			smartSpeed: 1000,
+			autoplayTimeout: setting.slideInterval,
+			slideTransition: 'swing'
+		});
+
+		function countdownShalat(time, name, desc, shalatName = '') {
+			$('.myprayer').removeClass('highlight');
+			$('.' + name).closest('.myprayer').addClass('highlight');
+			$('.desc').text(desc);
+			finalTime = time;
+			let x = setInterval(function () {
+				let distance = finalTime - moment().unix();
+				let hours = Math.floor((distance % (60 * 60 * 24)) / (60 * 60));
+				let minutes = Math.floor((distance % (60 * 60)) / 60);
+				let seconds = Math.floor(distance % (60));
+
+				if (distance < 0) {
+					clearInterval(x);
+					if (name == 'adzan') {
+						countdownShalat(moment().add(setting.shalatSunnahTime).unix(), 'shalat_sunnah', 'IQOMAH ' + shalatName, shalatName);
+						if (shalatName == 'SUBUH') { countdownShalat(moment().add(setting.shalatSunnahTimeSubuh).unix(), 'shalat_sunnah', 'MENJELANG IQOMAH ' + shalatName, shalatName); }
+					} else if (name == 'shalat_sunnah') {
+						beep();
+						countdownShalat(moment().add(setting.iqomahTime).unix(), 'iqomah', 'IQOMAH ' + shalatName, shalatName);
+					} else if (inArray(name, ['SUBUH', 'ZHUHUR', 'ASHAR', 'MAGHRIB', 'ISYA'])) {
+						beep();
+						countdownShalat(moment().add(setting.adzanTime).unix(), 'adzan', 'ADZAN ' + name, name);
+					} else {
+						nextSchedule();
+					}
+				} else {
+					$(".countdown-event").text(desc + moment().second(seconds).minute(minutes).hour(hours).format('HH:mm:ss'));
+				}
+				// Mengambil waktu terkini di zona waktu WIB menggunakan WorldTimeAPI
+				let currentTime = new Date();
+
+				// Membuat format HH:mm:ss
+				let formattedTime = currentTime.toLocaleTimeString('en-US', { hour12: false });
+				// Menampilkan waktu yang telah diformat
+				// console.log("Waktu di WIB: " + formattedTime);
+				// console.log("Waktu hari ini: " + formattedTime);
+				// $('.masehi').html(moment().format('HH:mm:ss'));
+				$('.time').html(formattedTime);
+				$('.day').html(moment().format('dddd'));
+				$('.date').html(moment().format('DD MMMM YYYY <br> iD iMMMM iYYYY'));
+			}, 1000);
+		}
+
+		function nextSchedule() {
+			let found = false;
+			for (let a = 0; a < tempShalat.length; a++) {
+				let now = moment().unix();
+				let next = moment(moment().format('YYYY-MM-DD [' + tempShalat[a] + ':00]'), 'YYYY-MM-DD HH:mm:ss').unix();
+				if (now < next) {//console.log(moment.unix(next).format('YYYY/MM/DD HH:mm:ss'));
+					countdownShalat(next, masterName[a], masterName[a] + ' -');
+					found = true;
+					//console.log([masterName[a], masterTime[a]]);
+					return false;
+				} else {
+					//console.log(tempShalat);
+					//console.log('lewat'+a +masterName[a]);
+					//tempShalat.shift();
+				}
+
+			}
+			let splt = tempShalat[0].split(':');
+			next = moment().add(1, 'day').hour(splt[0]).minute(splt[1]).second(0).unix();
+			if (!found) countdownShalat(next, masterName[0], masterName[0] + ' -');
+		}
+
+		async function getImages() {
+			// get reference of /images/ path from firebase storage
+			let listRef = ref(storage, '/images/')
+			// list all content in /images/ folder
+			let res = await listAll(listRef)
+			// return an array where url of each item in res.items are retrieved
+			return await res.items.map(async item => {
+				return await getDownloadURL(ref(storage, item))
+			});
+		}
+		
 		function inArray(needle, haystack) {
-			var length = haystack.length;
-			for(var i = 0; i < length; i++) {
-				if(haystack[i] == needle) return true;
+			let length = haystack.length;
+			for (let i = 0; i < length; i++) {
+				if (haystack[i] == needle) return true;
 			}
 			return false;
 		}
-		var mycountdown;
-		var finalTime;
-		$(function(){			
-			function beep(){
-				$('#player')[0].play();
-			}
-			var offsetIcon = setting.timezoneOffset>0?'+':(setting.timezoneOffset==0)?'':'-';
-			var now = new Date(); // today
-			prayTimes.setMethod(setting.methodCalc);
-			prayTimes.tune(setting.tune);
-			var times = prayTimes.getTimes(now, [setting.latitude, setting.longitude], setting.timezoneOffset, setting.dst);
-			var masterTime = [times.imsak, times.fajr, times.sunrise, times.dhuhr, times.asr, times.maghrib, times.isha];
-			var masterName = setting.aliasName;
-			var tempShalat = masterTime;			
-			$('.IMSAK').text(times.imsak);
-			$('.SUBUH').text(times.fajr);
-			$('.SYURUQ').text(times.sunrise);
-			$('.ZHUHUR').text(times.dhuhr);
-			$('.ASHAR').text(times.asr);
-			$('.MAGHRIB').text(times.maghrib);
-			$('.ISYA').text(times.isha);
-			//console.log(times);			
-			$('.tz-offset').text(offsetIcon+setting.timezoneOffset);
-			$('.latitude').text(setting.latitude);
-			$('.longitude').text(setting.longitude);
-			$('.altitude').text(setting.altitude);
-			$('.middle1').text(setting.nama);
-			$('.middle2').text(setting.alamat);
-			$('.version').text(app.version);
-			$('.appname').text(app.name);
-			
-			$.ajax({
-				url: setting.runningTextFile,
-				success: function(d){
-					$('.running-text').text(d);
-					$('.running-text').marquee({duration: setting.runningTextSpeed});
-				}
-			});			
-			
-			moment.locale('id'); 
-			//$('.masehi').text(moment().format('ddd, DD/MM/YYYY'));
-			//$('.hijriah').text(moment().format('iD iMMMM iYYYY'));			
-			
-			function countdownShalat(time, name, desc, shalatName =''){
-				$('.myprayer').removeClass('highlight');
-				$('.'+ name).closest('.myprayer').addClass('highlight');
-				$('.desc').text(desc);
-				finalTime = time;
-				var x = setInterval(function() {
-					var distance = finalTime - moment().unix();
-					var hours = Math.floor((distance % (60 * 60 * 24)) / ( 60 * 60));
-					var minutes = Math.floor((distance % ( 60 * 60)) / 60);
-					var seconds = Math.floor(distance % ( 60) );
-										
-					if (distance < 0) {
-						clearInterval(x);
-						if(name=='adzan'){
-							countdownShalat(moment().add(setting.shalatSunnahTime).unix(), 'shalat_sunnah', 'MENJELANG IQOMAH '+shalatName, shalatName);
-								if(shalatName=='SUBUH'){ countdownShalat(moment().add(setting.shalatSunnahTimeSubuh).unix(),'shalat_sunnah','MENJELANG IQOMAH ' +shalatName,shalatName); }
-						}else if(name=='shalat_sunnah'){
-							beep();
-							countdownShalat(moment().add(setting.iqomahTime).unix(), 'iqomah', 'IQOMAH '+shalatName, shalatName);
-						}else if(inArray(name, ['SUBUH', 'ZHUHUR', 'ASHAR', 'MAGHRIB', 'ISYA'])){
-							beep();
-							countdownShalat(moment().add(setting.adzanTime).unix(), 'adzan', 'ADZAN '+name, name);
-						}else{
-							nextSchedule();
-						}
-					}else{
-						$(".countdown-event").text(moment().second(seconds).minute(minutes).hour(hours).format('HH:mm:ss'));
-					}
-					// Mengambil waktu terkini di zona waktu WIB menggunakan WorldTimeAPI
-					fetch('https://worldtimeapi.org/api/timezone/Asia/Jakarta')
-					.then(response => response.json())
-					.then(data => {
-						// Mendapatkan waktu dari data yang diterima
-						var currentTime = new Date(data.utc_datetime);
-						
-						// Membuat format HH:mm:ss
-						var formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
-
-						// Menampilkan waktu yang telah diformat
-						console.log("Waktu di WIB: " + formattedTime);
-						console.log("Waktu hari ini: " + formattedTime);
-						// $('.masehi').html(moment().format('HH:mm:ss'));
-						$('.masehi').html(formattedTime);
-						$('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
-						$('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
-					})
-					.catch(error => {
-						console.error('Error fetching time:', error);
-					});
-					// var currentTime = new Date();
-					// var formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
-					// console.log("Waktu hari ini: " + formattedTime);
-					// // $('.masehi').html(moment().format('HH:mm:ss'));
-					// $('.masehi').html(formattedTime);
-					// $('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
-					// $('.hijriah').text(moment().format('ddd, DD/MM/YYYY')+' - '+moment().format('iD iMMMM iYYYY'));
-				}, 1000);
-			}
-					
-			function nextSchedule(){
-				var found=false;
-				for(a=0;a<tempShalat.length;a++){
-					var now = moment().unix();
-					var next = moment(moment().format('YYYY-MM-DD ['+tempShalat[a]+':00]'), 'YYYY-MM-DD HH:mm:ss').unix();
-					if(now <next){//console.log(moment.unix(next).format('YYYY/MM/DD HH:mm:ss'));
-						countdownShalat(next, masterName[a], 'MENJELANG '+masterName[a]);
-						found=true;
-						//console.log([masterName[a], masterTime[a]]);
-						return false;
-					}else{
-						//console.log(tempShalat);
-						//console.log('lewat'+a +masterName[a]);
-						//tempShalat.shift();
-					}
-					
-				}
-				var splt = tempShalat[0].split(':');
-				next = moment().add(1, 'day').hour(splt[0]).minute(splt[1]).second(0).unix();
-				if(!found) countdownShalat(next, masterName[0], 'MENJELANG '+masterName[0]);
-			}
-			nextSchedule();
-			
-		// 	function refreshApps(){
-		// 		if(moment().format('h')==0){
-		// 			location.reload();
-		// 		}
-		// 		setInterval(refreshApps, 18000);
-		// 	}
-		// 	refreshApps();
-
-			for(a=1;a<=setting.slideImageCount;a++){
-				$('.slide-container').append('<div class="item" style="background-image: url(\'www/public/Bilal/img/slide/'+a+'.jpg\')"></div>');
-			}
-			
-			$('.owl-carousel').owlCarousel({
-				loop:true,
-				items:1,
-				dots:false,
-				lazyLoad: true,
-				autoplay:true,
-				smartSpeed: 1000,
-				autoplayTimeout:setting.slideInterval,
-				slideTransition:'swing'
-			});			
-		});
+	</script>
+	<script>
 		function toggle_fullscreen() {
 			if (!document.fullscreenElement) {
 				document.body.requestFullscreen();
-				document.body.setAttribute("fullscreen",""); 
+				document.body.setAttribute("fullscreen", "");
 			} else {
 				document.exitFullscreen();
-				document.body.removeAttribute("fullscreen"); 
+				document.body.removeAttribute("fullscreen");
 			}
 		}
+
+		function beep() {
+			$('#player')[0].play();
+		}
 	</script>
+	<script src="www/public/js/owlcarousel/owl.carousel.min.js"></script>
 </body>
+
 </html>
